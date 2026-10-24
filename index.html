@@ -493,7 +493,6 @@
             currentUser = null;
             showLogin();
         }
-
         async function syncWithCloud(showAlert = false) {
   try {
     const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
