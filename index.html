@@ -509,6 +509,8 @@
                     if (record.categories) categories = record.categories;
                     if (record.units) units = record.units;
                 }
+                if (typeof renderInventory === 'function') renderInventory();
+}
                 if (showAlert) alert("Sincronizzazione completata con successo!");
                 if (currentUser) {
                     populateSelects();
