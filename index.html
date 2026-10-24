@@ -495,21 +495,32 @@
         }
 
         async function syncWithCloud(showAlert = false) {
-            try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
-                });
-                if (!response.ok) throw new Error("Errore di rete Cloud");
-                const data = await response.json();
-                const record = data.record;
-                if (record) {
-                    if (record.inventory) inventory = record.inventory;
-                    if (record.historyLog) historyLog = record.historyLog;
-                    if (record.authorizedUsers) authorizedUsers = record.authorizedUsers;
-                    if (record.categories) categories = record.categories;
-                    if (record.units) units = record.units;
-                }
-                if (typeof renderInventory === 'function') renderInventory();
+  try {
+    const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY }
+    });
+    
+    if (!response.ok) throw new Error("Errore di rete Cloud");
+    
+    const data = await response.json();
+    const record = data.record;
+    
+    if (record) {
+      if (record.inventory) inventory = record.inventory;
+      if (record.historyLog) historyLog = record.historyLog;
+      if (record.authorizedUsers) authorizedUsers = record.authorizedUsers;
+      if (record.categories) categories = record.categories;
+      if (record.units) units = record.units;
+
+      // Aggiorna subito la vista dell'inventario a schermo
+      if (typeof renderInventory === 'function') renderInventory();
+    }
+
+    if (showAlert) alert("Sincronizzazione completata con successo!");
+  } catch (error) {
+    console.error("Errore durante la sincronizzazione:", error);
+    if (showAlert) alert("Impossibile sincronizzare con il Cloud. Verifica la connessione o le chiavi API.");
+  }
 }
                 if (showAlert) alert("Sincronizzazione completata con successo!");
                 if (currentUser) {
